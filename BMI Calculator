@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'dart:io';
+
+void main() {
+  runApp(const A());
+}
+
+String BMI_Res(BMIVal) {
+  if (BMIVal <= 18.5) {
+    return "You are Underweight";
+  } else if (BMIVal > 18.5 && BMIVal < 24.9) {
+    return "You are in the Healthy Weight Range";
+  } else if (BMIVal > 25 && BMIVal < 29.9) {
+    return "You are Overweight";
+  } else {
+    return ("You are Obese");
+  }
+}
+
+(String, double) BMICalc(weight, height) {
+  double BMI = 0;
+  BMI = (weight) / (height*height);
+  return ('Your BMI is $BMI', BMI);
+}
+
+class A extends StatefulWidget {
+  const A({super.key});
+
+  @override
+  State<A> createState() => _AState();
+}
+
+class _AState extends State<A> {
+  TextEditingController wtTEC = TextEditingController();
+  TextEditingController htTEC = TextEditingController();
+  String BMI_comm = '';
+  String BMIVal='';
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: const Text("BMI Calculator")),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width:300,
+                child:
+              TextField(
+                  keyboardType: TextInputType.number,
+                  controller: wtTEC,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Your Weight(in Kg)',
+                    border: OutlineInputBorder(),
+                  ))),
+              Container(
+                width:300,
+                child:
+              TextField(
+                  keyboardType: TextInputType.number,
+                  controller: htTEC,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Your Height(in m)',
+                    border: OutlineInputBorder(),
+                  ))),
+              MaterialButton(
+                onPressed: () {
+                  var _wt = double.parse(wtTEC.text);
+                  var _ht = double.parse(htTEC.text);
+                  setState(() {
+                    var (a, b) = BMICalc(_wt, _ht);
+                    BMIVal = a;
+                    BMI_comm = BMI_Res(b);
+                  });
+                },
+                color: Colors.blue,
+                child: const Text("Calculate",
+                    style: TextStyle(color: Colors.white)),
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+              ),
+              Text('$BMIVal', style: TextStyle(fontSize:20.0 ) ),
+              Text('$BMI_comm',style: TextStyle(fontSize:20.0 )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
